@@ -2,29 +2,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f4f6f8;
-  --foreground: #10151c;
-  --card: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.08);
-  --muted: #64748b;
-  --accent: #2563eb;
-  --accent-2: #0ea5a4;
-  --danger: #dc2626;
-  --success: #16a34a;
-  --warning: #d97706;
+  --background: #f5f0e6;
+  --foreground: #2b2621;
+  --card: #fdfaf4;
+  --card-border: rgba(43, 38, 33, 0.1);
+  --muted: #7a7168;
+  --accent: #d97757;
+  --accent-2: #c9762f;
+  --danger: #c1503d;
+  --success: #4d7c5f;
+  --warning: #b8791f;
 }
 
 .dark {
-  --background: #0b0f16;
-  --foreground: #e6ebf2;
-  --card: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --muted: #8a97a8;
-  --accent: #4f8dff;
-  --accent-2: #2dd4c8;
-  --danger: #f87171;
-  --success: #4ade80;
-  --warning: #fbbf24;
+  --background: #262421;
+  --foreground: #f2ece1;
+  --card: rgba(255, 250, 240, 0.05);
+  --card-border: rgba(255, 250, 240, 0.1);
+  --muted: #a89f92;
+  --accent: #e08761;
+  --accent-2: #d9a153;
+  --danger: #e08076;
+  --success: #7fb08f;
+  --warning: #e0b25f;
 }
 
 @theme inline {

@@ -3,7 +3,7 @@ import "./globals.css";
 import { AppProviders } from "@/components/layout/AppProviders";
 
 export const metadata: Metadata = {
-  title: "Accuracy Analytics Dashboard",
+  title: "OptumRx - Chart Checker",
   description: "GLP-1 audit accuracy, coaching compliance, and performance analytics",
 };
 

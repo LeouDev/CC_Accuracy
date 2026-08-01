@@ -26,17 +26,17 @@ export default function CoachingPage() {
     };
   }, [rows]);
 
-  const bySupervisor = useMemo(() => {
+  const byAuditor = useMemo(() => {
     const map = new Map<string, { sum: number; count: number }>();
     for (const r of rows) {
-      if (r.compliance_days == null) continue;
-      const entry = map.get(r.supervisor) ?? { sum: 0, count: 0 };
+      if (r.compliance_days == null || !r.auditor) continue;
+      const entry = map.get(r.auditor) ?? { sum: 0, count: 0 };
       entry.sum += r.compliance_days;
       entry.count += 1;
-      map.set(r.supervisor, entry);
+      map.set(r.auditor, entry);
     }
     return Array.from(map.entries())
-      .map(([supervisor, v]) => ({ supervisor, avgDays: v.sum / v.count, count: v.count }))
+      .map(([auditor, v]) => ({ auditor, avgDays: v.sum / v.count, count: v.count }))
       .sort((a, b) => b.avgDays - a.avgDays);
   }, [rows]);
 
@@ -81,7 +81,7 @@ export default function CoachingPage() {
       <DataGate hasRows={rows.length > 0}>
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="glass-card p-4">
-            <h2 className="mb-3 text-sm font-semibold">Avg. Compliance Days by Supervisor / AM</h2>
+            <h2 className="mb-3 text-sm font-semibold">Avg. Compliance Days by Auditor</h2>
             <EChart
               option={{
                 backgroundColor: "transparent",
@@ -90,18 +90,18 @@ export default function CoachingPage() {
                 xAxis: { type: "value", axisLabel: { color: "#94a3b8" } },
                 yAxis: {
                   type: "category",
-                  data: [...bySupervisor].reverse().map((s) => s.supervisor),
+                  data: [...byAuditor].reverse().map((a) => a.auditor),
                   axisLabel: { color: "#94a3b8", fontSize: 10 },
                 },
                 series: [
                   {
                     type: "bar",
-                    data: [...bySupervisor].reverse().map((s) => Number(s.avgDays.toFixed(1))),
+                    data: [...byAuditor].reverse().map((a) => Number(a.avgDays.toFixed(1))),
                     color: "#fbbf24",
                   },
                 ],
               }}
-              height={Math.max(240, bySupervisor.length * 26)}
+              height={Math.max(240, byAuditor.length * 26)}
             />
           </div>
           <div className="glass-card p-4">

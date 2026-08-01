@@ -43,7 +43,7 @@ export function MultiSelect({ label, options, selected, onChange }: MultiSelectP
         <span className="max-w-[7rem] truncate font-medium">{summary}</span>
       </button>
       {open && (
-        <div className="glass-card absolute left-0 z-40 mt-1 max-h-64 w-56 overflow-y-auto p-2 shadow-xl">
+        <div className="absolute left-0 z-40 mt-1 max-h-64 w-56 overflow-y-auto rounded-2xl border border-card-border bg-[var(--background)] p-2 shadow-xl">
           {selected.length > 0 && (
             <button
               type="button"

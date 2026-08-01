@@ -45,7 +45,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center gap-2 px-4 py-4">
           <div className="h-7 w-7 flex-shrink-0 rounded-md bg-gradient-to-br from-accent to-accent-2" />
-          {!collapsed && <span className="text-sm font-semibold">Accuracy Analytics</span>}
+          {!collapsed && (
+            <div className="leading-tight">
+              <p className="text-xs font-medium text-muted">OptumRx</p>
+              <p className="text-sm font-semibold">Chart Checker</p>
+            </div>
+          )}
         </div>
         <nav className="flex-1 space-y-0.5 px-2">
           {NAV.map((item) => {

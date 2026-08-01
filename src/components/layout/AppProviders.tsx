@@ -25,7 +25,7 @@ function Bootstrap({ children }: { children: React.ReactNode }) {
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <Bootstrap>{children}</Bootstrap>
     </ThemeProvider>
   );

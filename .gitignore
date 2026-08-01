@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# safe to commit: public/publishable Supabase keys only, used by GitHub Actions build
+!.env.production
 
 # vercel
 .vercel
