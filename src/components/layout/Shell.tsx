@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import logo from "@/assets/logo.png";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
@@ -46,7 +47,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center gap-2 px-4 py-4">
           <Image
-            src="/logo.png"
+            src={logo}
             alt="OptumRx GLP-1 Chart Checker"
             width={28}
             height={28}
