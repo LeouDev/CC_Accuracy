@@ -15,6 +15,7 @@ interface GroupStat {
 export function groupAccuracy(cases: EnrichedCase[], keyFn: (c: EnrichedCase) => string): GroupStat[] {
   const map = new Map<string, { total: number; score: number }>();
   for (const c of cases) {
+    if (c.score === null) continue; // not yet auditable - excluded from Total Audits/Accuracy
     const k = keyFn(c);
     if (!k) continue;
     const entry = map.get(k) ?? { total: 0, score: 0 };

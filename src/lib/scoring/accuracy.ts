@@ -29,7 +29,14 @@ function normalize(value: string): string {
   return value.trim().toLowerCase();
 }
 
-export function scoreCase(row: ScorableRow): 0 | 1 {
+/**
+ * Returns null when the case isn't auditable yet (no technician decision
+ * recorded, so there's nothing to check for accuracy) - callers must
+ * exclude null scores from Total Audits / Accuracy % rather than treating
+ * them as failures.
+ */
+export function scoreCase(row: ScorableRow): 0 | 1 | null {
+  if (row.clinical_decision == null) return null;
   for (const rule of rules) {
     const result = rule(row);
     if (result !== null) return result;

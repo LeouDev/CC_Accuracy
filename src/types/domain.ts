@@ -23,7 +23,8 @@ export interface RawDataRecord {
   priority: string | null;
   case_date: string | null; // ISO date
   month: string | null;
-  score: 0 | 1;
+  /** null = not yet auditable (no technician decision recorded) - exclude from Total Audits/Accuracy. */
+  score: 0 | 1 | null;
 }
 
 export interface CoachingRecord {

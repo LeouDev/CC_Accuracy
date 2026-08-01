@@ -40,8 +40,9 @@ export default function AccuracyPage() {
     });
   }, [trend]);
 
-  const overallAccuracy = cases.length
-    ? (cases.reduce((s, c) => s + c.score, 0) / cases.length) * 100
+  const scoredCases = useMemo(() => cases.filter((c) => c.score !== null), [cases]);
+  const overallAccuracy = scoredCases.length
+    ? (scoredCases.reduce((s, c) => s + (c.score ?? 0), 0) / scoredCases.length) * 100
     : 0;
   const latest = trend[trend.length - 1];
   const previous = trend[trend.length - 2];

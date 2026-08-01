@@ -15,14 +15,16 @@ export default function ExecutivePage() {
   const lastUpload = useDataStore((s) => s.lastUpload);
 
   const stats = useMemo(() => {
-    const total = cases.length;
-    const passing = cases.reduce((sum, c) => sum + c.score, 0);
+    const scored = cases.filter((c) => c.score !== null);
+    const total = scored.length;
+    const passing = scored.reduce((sum, c) => sum + (c.score ?? 0), 0);
     const failing = total - passing;
     const accuracy = total ? (passing / total) * 100 : 0;
+    const notYetWorked = cases.length - total;
     const technicians = new Set(cases.map((c) => c.technician_msid)).size;
     const supervisors = new Set(cases.map((c) => c.supervisor)).size;
     const sites = new Set(cases.map((c) => c.site)).size;
-    return { total, passing, failing, accuracy, technicians, supervisors, sites };
+    return { total, passing, failing, accuracy, notYetWorked, technicians, supervisors, sites };
   }, [cases]);
 
   const insights = useMemo(() => buildInsights(cases), [cases]);
@@ -46,7 +48,15 @@ export default function ExecutivePage() {
           value={`${stats.accuracy.toFixed(1)}%`}
           tone={stats.accuracy >= 90 ? "success" : stats.accuracy >= 75 ? "warning" : "danger"}
         />
-        <KpiCard label="Total Audits" value={stats.total.toLocaleString()} />
+        <KpiCard
+          label="Total Audits"
+          value={stats.total.toLocaleString()}
+          sub={
+            stats.notYetWorked > 0
+              ? `${stats.notYetWorked.toLocaleString()} not yet worked (excluded)`
+              : undefined
+          }
+        />
         <KpiCard label="Passing Audits" value={stats.passing.toLocaleString()} tone="success" />
         <KpiCard label="Failing Audits" value={stats.failing.toLocaleString()} tone="danger" />
         <KpiCard label="Total Technicians" value={stats.technicians.toLocaleString()} />

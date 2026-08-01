@@ -21,8 +21,10 @@ export default function SupervisorsPage() {
     const map = new Map<string, { total: number; passing: number; techs: Set<string> }>();
     for (const c of cases) {
       const entry = map.get(c.supervisor) ?? { total: 0, passing: 0, techs: new Set<string>() };
-      entry.total += 1;
-      entry.passing += c.score;
+      if (c.score !== null) {
+        entry.total += 1;
+        entry.passing += c.score;
+      }
       entry.techs.add(c.technician_msid);
       map.set(c.supervisor, entry);
     }
