@@ -1,5 +1,11 @@
 import * as XLSX from "xlsx";
-import { buildHeaderLookup, findColumn, excelValueToIsoDate, str } from "./normalize";
+import {
+  buildHeaderLookup,
+  findColumn,
+  excelValueToIsoDate,
+  parseTimestampToIsoDate,
+  str,
+} from "./normalize";
 import type { RawDataRecord } from "@/types/domain";
 import { scoreCase } from "@/lib/scoring/accuracy";
 
@@ -28,6 +34,7 @@ export function parseRawDataSheet(sheet: XLSX.WorkSheet): RawDataRecord[] {
   const commentsCol = findColumn(lookup, ["comments", "comment"]);
   const priorityCol = findColumn(lookup, ["priority"]);
   const dateCol = findColumn(lookup, ["date"]);
+  const decisionTimestampCol = findColumn(lookup, ["enhancedtechniciandecisiontimestamp"]);
   const monthCol = findColumn(lookup, ["month"]);
 
   if (!caseIdCol || !msidCol) return [];
@@ -56,7 +63,12 @@ export function parseRawDataSheet(sheet: XLSX.WorkSheet): RawDataRecord[] {
       subcategory: subcategoryCol ? str(r[subcategoryCol]) : null,
       comments: commentsCol ? str(r[commentsCol]) : null,
       priority: priorityCol ? str(r[priorityCol]) : null,
-      case_date: dateCol ? excelValueToIsoDate(r[dateCol]) : null,
+      case_date: decisionTimestampCol
+        ? (parseTimestampToIsoDate(r[decisionTimestampCol]) ??
+          (dateCol ? excelValueToIsoDate(r[dateCol]) : null))
+        : dateCol
+          ? excelValueToIsoDate(r[dateCol])
+          : null,
       month: monthCol ? str(r[monthCol]) : null,
     };
     byCaseId.set(base.case_id, { ...base, score: scoreCase(base) });
