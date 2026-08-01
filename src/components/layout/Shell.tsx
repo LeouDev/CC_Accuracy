@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
@@ -44,7 +45,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
         }`}
       >
         <div className="flex items-center gap-2 px-4 py-4">
-          <div className="h-7 w-7 flex-shrink-0 rounded-md bg-gradient-to-br from-accent to-accent-2" />
+          <Image
+            src="/logo.png"
+            alt="OptumRx GLP-1 Chart Checker"
+            width={28}
+            height={28}
+            className="h-7 w-7 flex-shrink-0 rounded-md object-cover"
+          />
           {!collapsed && (
             <div className="leading-tight">
               <p className="text-xs font-medium text-muted">OptumRx</p>
