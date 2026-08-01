@@ -9,18 +9,12 @@ import type {
 const FALLBACK_SITE = "Onshore";
 const FALLBACK_SUPERVISOR = "Melvin Suarez";
 
-function isoWeek(dateIso: string): string {
+/** Returns the ISO date (YYYY-MM-DD) of the Saturday that ends the Sun-Sat week containing dateIso. */
+function weekEndingSaturday(dateIso: string): string {
   const d = new Date(dateIso + "T00:00:00Z");
-  const target = new Date(d.valueOf());
-  const dayNr = (d.getUTCDay() + 6) % 7;
-  target.setUTCDate(target.getUTCDate() - dayNr + 3);
-  const firstThursday = target.valueOf();
-  target.setUTCMonth(0, 1);
-  if (target.getUTCDay() !== 4) {
-    target.setUTCMonth(0, 1 + ((4 - target.getUTCDay() + 7) % 7));
-  }
-  const week = 1 + Math.round((firstThursday - target.valueOf()) / (7 * 86400000));
-  return `${d.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+  const daysUntilSaturday = (6 - d.getUTCDay() + 7) % 7;
+  d.setUTCDate(d.getUTCDate() + daysUntilSaturday);
+  return d.toISOString().slice(0, 10);
 }
 
 function quarterOf(dateIso: string): string {
@@ -82,7 +76,7 @@ export function buildEnrichedCases(
       technician_name: roster?.employee_name || row.technician_msid,
       site: roster?.site || FALLBACK_SITE,
       supervisor: roster ? canonicalize(roster.am_name) || FALLBACK_SUPERVISOR : FALLBACK_SUPERVISOR,
-      week: dateIso ? isoWeek(dateIso) : "",
+      week: dateIso ? weekEndingSaturday(dateIso) : "",
       quarter: dateIso ? quarterOf(dateIso) : "",
       year: dateIso ? new Date(dateIso).getUTCFullYear() : 0,
       has_human_finding: row.auditor_finding === "Agree" || row.auditor_finding === "Disagree",

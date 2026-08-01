@@ -6,6 +6,8 @@ import { groupAccuracy } from "@/lib/insights";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EChart } from "@/components/charts/EChart";
 import { DataGate } from "@/components/ui/DataGate";
+import { ACCURACY_TARGET_PCT } from "@/lib/constants";
+import { formatWeekLabel } from "@/lib/formatWeek";
 import type { EnrichedCase } from "@/types/domain";
 
 type Granularity = "week" | "month" | "quarter" | "year";
@@ -50,7 +52,14 @@ export default function AccuracyPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <KpiCard label="Overall Accuracy" value={`${overallAccuracy.toFixed(1)}%`} />
-          <KpiCard label={`Latest ${granularity}`} value={latest ? `${latest.accuracy.toFixed(1)}%` : "—"} />
+          <KpiCard
+            label={`Latest ${granularity}`}
+            value={
+              latest
+                ? `${latest.accuracy.toFixed(1)}% ${granularity === "week" ? `(${formatWeekLabel(latest.key)})` : ""}`
+                : "—"
+            }
+          />
           <KpiCard
             label="Change vs prior period"
             value={delta == null ? "—" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} pts`}
@@ -85,7 +94,7 @@ export default function AccuracyPage() {
               legend: { data: ["Accuracy %", "Rolling avg"], textStyle: { color: "#94a3b8" }, top: 0 },
               xAxis: {
                 type: "category",
-                data: trend.map((t) => t.key),
+                data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
                 axisLabel: { color: "#94a3b8", fontSize: 10, rotate: 45 },
               },
               yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
@@ -95,6 +104,13 @@ export default function AccuracyPage() {
                   type: "bar",
                   data: trend.map((t) => Number(t.accuracy.toFixed(1))),
                   color: "#4f8dff",
+                  markLine: {
+                    silent: true,
+                    symbol: "none",
+                    lineStyle: { color: "#c9762f", type: "dashed" },
+                    label: { formatter: `Target ${ACCURACY_TARGET_PCT}%`, color: "#c9762f" },
+                    data: [{ yAxis: ACCURACY_TARGET_PCT }],
+                  },
                 },
                 { name: "Rolling avg", type: "line", data: rolling, smooth: true, color: "#2dd4c8" },
               ],

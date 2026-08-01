@@ -1,4 +1,5 @@
 import type { EnrichedCase } from "@/types/domain";
+import { formatWeekLabel } from "@/lib/formatWeek";
 
 export interface Insight {
   label: string;
@@ -85,7 +86,7 @@ export function buildInsights(cases: EnrichedCase[]): Insight[] {
       const delta = last.accuracy - prev.accuracy;
       insights.push({
         label: "Biggest week-over-week change",
-        detail: `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} pts (${weeks[weeks.length - 2]} → ${weeks[weeks.length - 1]})`,
+        detail: `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} pts (${formatWeekLabel(weeks[weeks.length - 2])} → ${formatWeekLabel(weeks[weeks.length - 1])})`,
       });
     }
   }

@@ -7,6 +7,8 @@ import { KpiCard } from "@/components/ui/KpiCard";
 import { EChart } from "@/components/charts/EChart";
 import { DataGate } from "@/components/ui/DataGate";
 import { buildInsights, groupAccuracy } from "@/lib/insights";
+import { ACCURACY_TARGET_PCT } from "@/lib/constants";
+import { formatWeekLabel } from "@/lib/formatWeek";
 
 export default function ExecutivePage() {
   const cases = useFilteredCases();
@@ -66,7 +68,7 @@ export default function ExecutivePage() {
               tooltip: { trigger: "axis" },
               xAxis: {
                 type: "category",
-                data: weeklyTrend.map((w) => w.key),
+                data: weeklyTrend.map((w) => formatWeekLabel(w.key)),
                 axisLabel: { color: "#94a3b8", fontSize: 10 },
               },
               yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
@@ -77,6 +79,13 @@ export default function ExecutivePage() {
                   smooth: true,
                   areaStyle: { opacity: 0.15 },
                   color: "#4f8dff",
+                  markLine: {
+                    silent: true,
+                    symbol: "none",
+                    lineStyle: { color: "#c9762f", type: "dashed" },
+                    label: { formatter: `Target ${ACCURACY_TARGET_PCT}%`, color: "#c9762f" },
+                    data: [{ yAxis: ACCURACY_TARGET_PCT }],
+                  },
                 },
               ],
             }}
