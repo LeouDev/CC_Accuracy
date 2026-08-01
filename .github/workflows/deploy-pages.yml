@@ -1,4 +1,4 @@
-$ cat /Users/leou/GLP_1/.github/workflows/deploy-pages.yml
+
 
 name: Deploy to GitHub Pages
 
