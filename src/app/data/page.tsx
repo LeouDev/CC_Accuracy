@@ -20,8 +20,13 @@ export default function DataPage() {
           { key: "auditor", header: "Auditor", accessor: (r) => r.auditor },
           { key: "clinical_decision", header: "Tech Decision", accessor: (r) => r.clinical_decision },
           {
+            key: "auto_decision_recommendation",
+            header: "Auto Decision Recommendation",
+            accessor: (r) => r.auto_decision_recommendation,
+          },
+          {
             key: "auto_insight_decision",
-            header: "Auto Decision",
+            header: "Auto Insight Decision",
             accessor: (r) => r.auto_insight_decision,
           },
           { key: "auditor_finding", header: "Auditor Finding", accessor: (r) => r.auditor_finding },

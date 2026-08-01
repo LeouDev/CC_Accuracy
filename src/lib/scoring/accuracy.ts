@@ -2,48 +2,37 @@ import type { RawDataRecord } from "@/types/domain";
 
 export type ScorableRow = Pick<
   RawDataRecord,
-  "clinical_decision" | "auto_insight_decision" | "auditor_finding"
+  "clinical_decision" | "auto_decision_recommendation" | "auditor_finding"
 >;
-
-/**
- * Modular accuracy scoring. Each rule is tried in order; the first
- * one that applies (returns non-null) determines the score.
- * New rules can be appended without touching existing logic.
- */
-type ScoringRule = (row: ScorableRow) => 0 | 1 | null;
-
-const humanFindingRule: ScoringRule = (row) => {
-  if (row.auditor_finding === "Agree") return 1;
-  if (row.auditor_finding === "Disagree") return 0;
-  return null;
-};
-
-const systemConsistencyRule: ScoringRule = (row) => {
-  if (row.clinical_decision == null || row.auto_insight_decision == null) return null;
-  return normalize(row.clinical_decision) === normalize(row.auto_insight_decision) ? 1 : 0;
-};
-
-const rules: ScoringRule[] = [humanFindingRule, systemConsistencyRule];
 
 function normalize(value: string): string {
   return value.trim().toLowerCase();
 }
 
 /**
- * Returns null when the case isn't auditable yet (no technician decision
- * recorded, so there's nothing to check for accuracy) - callers must
- * exclude null scores from Total Audits / Accuracy % rather than treating
- * them as failures.
+ * Accuracy scoring, confirmed truth table:
+ *
+ *   Clinical vs AutoDecisionRecommendation | Auditor Finding | Score
+ *   match                                  | Agree / blank   | 1
+ *   no match                               | Agree / blank   | 0
+ *   match                                  | Disagree        | 0   (flipped)
+ *   no match                               | Disagree        | 1   (flipped)
+ *
+ * Excluded (null, not counted in Total Audits/Accuracy) when Clinical or
+ * AutoDecisionRecommendation is blank - there's nothing to compare yet.
  */
 export function scoreCase(row: ScorableRow): 0 | 1 | null {
-  if (row.clinical_decision == null) return null;
-  for (const rule of rules) {
-    const result = rule(row);
-    if (result !== null) return result;
+  if (row.clinical_decision == null || row.auto_decision_recommendation == null) return null;
+
+  const matches = normalize(row.clinical_decision) === normalize(row.auto_decision_recommendation);
+  const base: 0 | 1 = matches ? 1 : 0;
+
+  if (row.auditor_finding === "Disagree") {
+    return base === 1 ? 0 : 1;
   }
-  return 0;
+  return base;
 }
 
-export function hasHumanFinding(row: ScorableRow): boolean {
+export function hasHumanFinding(row: Pick<RawDataRecord, "auditor_finding">): boolean {
   return row.auditor_finding === "Agree" || row.auditor_finding === "Disagree";
 }

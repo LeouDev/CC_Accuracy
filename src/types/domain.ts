@@ -15,6 +15,8 @@ export interface RawDataRecord {
   gpi: string | null;
   clinical_decision: string | null;
   auto_insight_decision: string | null;
+  /** Literal AutoDecisionRecommendation column - used for accuracy scoring (see scoring/accuracy.ts). */
+  auto_decision_recommendation: string | null;
   auditor_finding: string | null;
   auditor: string | null;
   category: string | null;

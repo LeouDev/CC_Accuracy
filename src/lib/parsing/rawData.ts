@@ -44,9 +44,8 @@ export function parseRawDataSheet(sheet: XLSX.WorkSheet): RawDataRecord[] {
         drug_name: drugCol ? str(r[drugCol]) : null,
         gpi: gpiCol ? str(r[gpiCol]) : null,
         clinical_decision: clinicalCol ? str(r[clinicalCol]) : null,
-        auto_insight_decision:
-          (autoInsightCol ? str(r[autoInsightCol]) : null) ??
-          (autoRecCol ? str(r[autoRecCol]) : null),
+        auto_insight_decision: autoInsightCol ? str(r[autoInsightCol]) : null,
+        auto_decision_recommendation: autoRecCol ? str(r[autoRecCol]) : null,
         auditor_finding: findingCol ? str(r[findingCol]) : null,
         auditor: auditorCol ? str(r[auditorCol]) : null,
         category: categoryCol ? str(r[categoryCol]) : null,
