@@ -34,27 +34,33 @@ export function parseRawDataSheet(sheet: XLSX.WorkSheet): RawDataRecord[] {
 
   const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: null });
 
-  return rows
-    .filter((r) => r[caseIdCol] != null && String(r[caseIdCol]).trim() !== "")
-    .map((r) => {
-      const base = {
-        case_id: String(r[caseIdCol]).trim(),
-        technician_msid: (msidCol ? str(r[msidCol]) : null) ?? "",
-        business_segment: segmentCol ? str(r[segmentCol]) : null,
-        drug_name: drugCol ? str(r[drugCol]) : null,
-        gpi: gpiCol ? str(r[gpiCol]) : null,
-        clinical_decision: clinicalCol ? str(r[clinicalCol]) : null,
-        auto_insight_decision: autoInsightCol ? str(r[autoInsightCol]) : null,
-        auto_decision_recommendation: autoRecCol ? str(r[autoRecCol]) : null,
-        auditor_finding: findingCol ? str(r[findingCol]) : null,
-        auditor: auditorCol ? str(r[auditorCol]) : null,
-        category: categoryCol ? str(r[categoryCol]) : null,
-        subcategory: subcategoryCol ? str(r[subcategoryCol]) : null,
-        comments: commentsCol ? str(r[commentsCol]) : null,
-        priority: priorityCol ? str(r[priorityCol]) : null,
-        case_date: dateCol ? excelValueToIsoDate(r[dateCol]) : null,
-        month: monthCol ? str(r[monthCol]) : null,
-      };
-      return { ...base, score: scoreCase(base) };
-    });
+  // case_id has a unique constraint in the DB; source exports sometimes contain
+  // the same case more than once (e.g. re-pulled into multiple combined weekly
+  // snapshots). Keep the last occurrence so a duplicate doesn't fail the whole upload.
+  const byCaseId = new Map<string, RawDataRecord>();
+
+  for (const r of rows) {
+    if (r[caseIdCol] == null || String(r[caseIdCol]).trim() === "") continue;
+    const base = {
+      case_id: String(r[caseIdCol]).trim(),
+      technician_msid: (msidCol ? str(r[msidCol]) : null) ?? "",
+      business_segment: segmentCol ? str(r[segmentCol]) : null,
+      drug_name: drugCol ? str(r[drugCol]) : null,
+      gpi: gpiCol ? str(r[gpiCol]) : null,
+      clinical_decision: clinicalCol ? str(r[clinicalCol]) : null,
+      auto_insight_decision: autoInsightCol ? str(r[autoInsightCol]) : null,
+      auto_decision_recommendation: autoRecCol ? str(r[autoRecCol]) : null,
+      auditor_finding: findingCol ? str(r[findingCol]) : null,
+      auditor: auditorCol ? str(r[auditorCol]) : null,
+      category: categoryCol ? str(r[categoryCol]) : null,
+      subcategory: subcategoryCol ? str(r[subcategoryCol]) : null,
+      comments: commentsCol ? str(r[commentsCol]) : null,
+      priority: priorityCol ? str(r[priorityCol]) : null,
+      case_date: dateCol ? excelValueToIsoDate(r[dateCol]) : null,
+      month: monthCol ? str(r[monthCol]) : null,
+    };
+    byCaseId.set(base.case_id, { ...base, score: scoreCase(base) });
+  }
+
+  return Array.from(byCaseId.values());
 }

@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useDataStore } from "@/store/dataStore";
 import { parseFileInWorker } from "@/lib/parsing/runInWorker";
 import { replaceRawData, replaceRoster, replaceCoaching } from "@/lib/supabase/upload";
+import { getErrorMessage } from "@/lib/errorMessage";
 import type { FileType, RawDataRecord, RosterRecord, CoachingRecord } from "@/types/domain";
 
 const SLOTS: { type: FileType; label: string; hint: string }[] = [
@@ -49,7 +50,7 @@ export default function UploadPage() {
     } catch (err) {
       setStatus((s) => ({
         ...s,
-        [type]: `Error: ${err instanceof Error ? err.message : String(err)}`,
+        [type]: `Error: ${getErrorMessage(err)}`,
       }));
     } finally {
       setBusy(null);
