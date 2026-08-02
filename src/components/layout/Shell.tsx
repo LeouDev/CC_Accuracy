@@ -21,6 +21,7 @@ const NAV = [
   { href: "/auditors", label: "Auditors" },
   { href: "/coaching", label: "Coaching" },
   { href: "/data", label: "Data Table" },
+  { href: "/scoring-guide", label: "Scoring Guide" },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
