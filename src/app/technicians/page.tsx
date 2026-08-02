@@ -30,7 +30,12 @@ export default function TechniciansPage() {
                 backgroundColor: "transparent",
                 grid: { left: 120, right: 30, top: 10, bottom: 20 },
                 tooltip: {},
-                xAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
+                xAxis: {
+                  type: "value",
+                  max: 100,
+                  splitNumber: 2,
+                  axisLabel: { color: "#94a3b8", formatter: "{value}%" },
+                },
                 yAxis: {
                   type: "category",
                   data: [...top10].reverse().map((t) => t.key),
@@ -54,7 +59,12 @@ export default function TechniciansPage() {
                 backgroundColor: "transparent",
                 grid: { left: 120, right: 30, top: 10, bottom: 20 },
                 tooltip: {},
-                xAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
+                xAxis: {
+                  type: "value",
+                  max: 100,
+                  splitNumber: 2,
+                  axisLabel: { color: "#94a3b8", formatter: "{value}%" },
+                },
                 yAxis: {
                   type: "category",
                   data: [...bottom10].reverse().map((t) => t.key),
