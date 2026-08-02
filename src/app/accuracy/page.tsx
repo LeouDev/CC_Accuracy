@@ -52,7 +52,11 @@ export default function AccuracyPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <KpiCard label="Overall Accuracy" value={`${overallAccuracy.toFixed(1)}%`} />
+          <KpiCard
+            label="Overall Accuracy"
+            value={`${overallAccuracy.toFixed(1)}%`}
+            tone={overallAccuracy >= ACCURACY_TARGET_PCT ? "success" : "danger"}
+          />
           <KpiCard
             label={`Latest ${granularity}`}
             value={
@@ -60,6 +64,7 @@ export default function AccuracyPage() {
                 ? `${latest.accuracy.toFixed(1)}% ${granularity === "week" ? `(${formatWeekLabel(latest.key)})` : ""}`
                 : "—"
             }
+            tone={latest ? (latest.accuracy >= ACCURACY_TARGET_PCT ? "success" : "danger") : "default"}
           />
           <KpiCard
             label="Change vs prior period"

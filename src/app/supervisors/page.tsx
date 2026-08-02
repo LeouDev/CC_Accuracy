@@ -5,6 +5,7 @@ import { useFilteredCases } from "@/hooks/useEnrichedData";
 import { EChart } from "@/components/charts/EChart";
 import { DataGate } from "@/components/ui/DataGate";
 import { DataTable } from "@/components/tables/DataTable";
+import { AccuracyCell } from "@/components/ui/AccuracyCell";
 
 interface SupervisorStat {
   supervisor: string;
@@ -74,7 +75,12 @@ export default function SupervisorsPage() {
             { key: "supervisor", header: "Supervisor / AM", accessor: (r) => r.supervisor },
             { key: "teamSize", header: "Team Size", accessor: (r) => r.teamSize },
             { key: "total", header: "Total Audits", accessor: (r) => r.total },
-            { key: "accuracy", header: "Accuracy %", accessor: (r) => Number(r.accuracy.toFixed(1)) },
+            {
+              key: "accuracy",
+              header: "Accuracy %",
+              accessor: (r) => Number(r.accuracy.toFixed(1)),
+              render: (r) => <AccuracyCell value={r.accuracy} />,
+            },
             { key: "failurePct", header: "Failure %", accessor: (r) => Number((100 - r.accuracy).toFixed(1)) },
           ]}
         />

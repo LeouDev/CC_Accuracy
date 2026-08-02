@@ -6,6 +6,7 @@ import { groupAccuracy } from "@/lib/insights";
 import { EChart } from "@/components/charts/EChart";
 import { DataGate } from "@/components/ui/DataGate";
 import { DataTable } from "@/components/tables/DataTable";
+import { AccuracyCell } from "@/components/ui/AccuracyCell";
 
 export default function SitesPage() {
   const cases = useFilteredCases();
@@ -69,7 +70,12 @@ export default function SitesPage() {
           columns={[
             { key: "key", header: "Site", accessor: (r) => r.key },
             { key: "total", header: "Total Audits", accessor: (r) => r.total },
-            { key: "accuracy", header: "Accuracy %", accessor: (r) => Number(r.accuracy.toFixed(1)) },
+            {
+              key: "accuracy",
+              header: "Accuracy %",
+              accessor: (r) => Number(r.accuracy.toFixed(1)),
+              render: (r) => <AccuracyCell value={r.accuracy} />,
+            },
           ]}
         />
       </DataGate>

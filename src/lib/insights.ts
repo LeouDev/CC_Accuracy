@@ -10,6 +10,8 @@ interface GroupStat {
   key: string;
   accuracy: number;
   total: number;
+  passing: number;
+  failing: number;
 }
 
 export function groupAccuracy(cases: EnrichedCase[], keyFn: (c: EnrichedCase) => string): GroupStat[] {
@@ -27,6 +29,8 @@ export function groupAccuracy(cases: EnrichedCase[], keyFn: (c: EnrichedCase) =>
     key,
     accuracy: v.total ? (v.score / v.total) * 100 : 0,
     total: v.total,
+    passing: v.score,
+    failing: v.total - v.score,
   }));
 }
 

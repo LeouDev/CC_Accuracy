@@ -58,7 +58,7 @@ export default function ExecutivePage() {
         <KpiCard
           label="Overall Accuracy"
           value={`${stats.accuracy.toFixed(1)}%`}
-          tone={stats.accuracy >= 90 ? "success" : stats.accuracy >= 75 ? "warning" : "danger"}
+          tone={stats.accuracy >= ACCURACY_TARGET_PCT ? "success" : "danger"}
         />
         <KpiCard
           label="Total Audits"

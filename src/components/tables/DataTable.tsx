@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import * as XLSX from "xlsx";
 
 export interface ColumnDef<T> {
   key: string;
   header: string;
   accessor: (row: T) => string | number | null;
+  /** Optional custom display (e.g. colored %). Falls back to accessor's raw value if omitted. Sorting/search/export always use accessor. */
+  render?: (row: T) => ReactNode;
 }
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const;
@@ -160,7 +162,7 @@ export function DataTable<T>({
               <tr key={i} className="border-b border-card-border/50 hover:bg-accent/5">
                 {columns.map((c) => (
                   <td key={c.key} className="whitespace-nowrap px-3 py-2">
-                    {c.accessor(row) ?? "—"}
+                    {c.render ? c.render(row) : (c.accessor(row) ?? "—")}
                   </td>
                 ))}
               </tr>

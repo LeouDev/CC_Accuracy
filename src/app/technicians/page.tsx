@@ -6,6 +6,7 @@ import { groupAccuracy } from "@/lib/insights";
 import { EChart } from "@/components/charts/EChart";
 import { DataGate } from "@/components/ui/DataGate";
 import { DataTable } from "@/components/tables/DataTable";
+import { AccuracyCell } from "@/components/ui/AccuracyCell";
 
 export default function TechniciansPage() {
   const cases = useFilteredCases();
@@ -77,8 +78,14 @@ export default function TechniciansPage() {
           filename="technician-ranking"
           columns={[
             { key: "key", header: "Technician", accessor: (r) => r.key },
-            { key: "accuracy", header: "Accuracy %", accessor: (r) => Number(r.accuracy.toFixed(1)) },
+            {
+              key: "accuracy",
+              header: "Accuracy %",
+              accessor: (r) => Number(r.accuracy.toFixed(1)),
+              render: (r) => <AccuracyCell value={r.accuracy} />,
+            },
             { key: "total", header: "Total Audits", accessor: (r) => r.total },
+            { key: "failing", header: "Failed Audits", accessor: (r) => r.failing },
           ]}
         />
       </DataGate>
