@@ -83,7 +83,7 @@ export default function AccuracyPage() {
       </div>
 
       <DataGate hasRows={trend.length > 0}>
-        <div className="glass-card p-4">
+        <div className="chart-card p-4">
           <h2 className="mb-3 text-sm font-semibold">
             Accuracy Trend by {granularity} (with 4-period rolling average)
           </h2>

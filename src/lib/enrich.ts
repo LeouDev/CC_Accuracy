@@ -5,6 +5,7 @@ import type {
   EnrichedCase,
   EnrichedCoaching,
 } from "@/types/domain";
+import { getSegmentCategory } from "@/lib/segmentCategory";
 
 const FALLBACK_SITE = "Onshore";
 const FALLBACK_SUPERVISOR = "Melvin Suarez";
@@ -80,6 +81,7 @@ export function buildEnrichedCases(
       quarter: dateIso ? quarterOf(dateIso) : "",
       year: dateIso ? new Date(dateIso).getUTCFullYear() : 0,
       has_human_finding: row.auditor_finding === "Agree" || row.auditor_finding === "Disagree",
+      segment_category: getSegmentCategory(row.business_segment),
     };
   });
 }

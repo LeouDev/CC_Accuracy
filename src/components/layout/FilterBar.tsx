@@ -11,6 +11,7 @@ const DIMENSIONS: { key: keyof FilterOptions; label: string }[] = [
   { key: "auditor", label: "Auditor" },
   { key: "category", label: "Category" },
   { key: "subcategory", label: "Subcategory" },
+  { key: "segmentCategory", label: "Segment" },
   { key: "month", label: "Month" },
   { key: "quarter", label: "Quarter" },
   { key: "year", label: "Year" },

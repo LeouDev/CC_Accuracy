@@ -42,7 +42,7 @@ export default function SupervisorsPage() {
   return (
     <div className="space-y-6">
       <DataGate hasRows={stats.length > 0}>
-        <div className="glass-card p-4">
+        <div className="chart-card p-4">
           <h2 className="mb-3 text-sm font-semibold">Accuracy by Supervisor / AM</h2>
           <EChart
             option={{

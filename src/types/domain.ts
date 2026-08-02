@@ -52,6 +52,7 @@ export interface EnrichedCase extends RawDataRecord {
   quarter: string; // e.g. "2026-Q1"
   year: number;
   has_human_finding: boolean;
+  segment_category: string; // Commercial / M&R, derived from business_segment
 }
 
 export interface EnrichedCoaching extends CoachingRecord {
@@ -67,6 +68,7 @@ export interface FilterState {
   auditor: string[];
   category: string[];
   subcategory: string[];
+  segmentCategory: string[];
   month: string[];
   quarter: string[];
   year: string[];

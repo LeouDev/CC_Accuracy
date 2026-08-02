@@ -22,7 +22,7 @@ export default function TechniciansPage() {
     <div className="space-y-6">
       <DataGate hasRows={ranking.length > 0}>
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Top 10 Technicians</h2>
             <EChart
               option={{
@@ -46,7 +46,7 @@ export default function TechniciansPage() {
               height={320}
             />
           </div>
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Lowest 10 Technicians</h2>
             <EChart
               option={{

@@ -80,7 +80,7 @@ export default function CoachingPage() {
 
       <DataGate hasRows={rows.length > 0}>
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Avg. Compliance Days by Auditor</h2>
             <EChart
               option={{
@@ -104,7 +104,7 @@ export default function CoachingPage() {
               height={Math.max(240, byAuditor.length * 26)}
             />
           </div>
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Compliance Days Trend by Month</h2>
             <EChart
               option={{

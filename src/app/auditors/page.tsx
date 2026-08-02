@@ -52,7 +52,7 @@ export default function AuditorsPage() {
       />
 
       <DataGate hasRows={stats.length > 0}>
-        <div className="glass-card p-4">
+        <div className="chart-card p-4">
           <h2 className="mb-3 text-sm font-semibold">Audit Volume by Auditor</h2>
           <EChart
             option={{

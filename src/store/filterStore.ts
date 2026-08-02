@@ -13,6 +13,7 @@ const initial: FilterState = {
   auditor: [],
   category: [],
   subcategory: [],
+  segmentCategory: [],
   month: [],
   quarter: [],
   year: [],

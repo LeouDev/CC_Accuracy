@@ -12,11 +12,12 @@ function normalize(value: string): string {
 /**
  * Accuracy scoring, confirmed truth table:
  *
- *   Clinical vs AutoDecisionRecommendation | Auditor Finding | Score
- *   match                                  | Agree / blank   | 1
- *   no match                               | Agree / blank   | 0
- *   match                                  | Disagree        | 0   (flipped)
- *   no match                               | Disagree        | 1   (flipped)
+ *   Auditor Finding | Clinical vs AutoDecisionRecommendation | Score
+ *   Agree            | match or no match                     | 1   (always)
+ *   blank            | match                                  | 1
+ *   blank            | no match                               | 0
+ *   Disagree         | match                                  | 0   (flipped)
+ *   Disagree         | no match                               | 1   (flipped)
  *
  * Excluded (null, not counted in Total Audits/Accuracy) when Clinical or
  * AutoDecisionRecommendation is blank - there's nothing to compare yet.
@@ -24,13 +25,14 @@ function normalize(value: string): string {
 export function scoreCase(row: ScorableRow): 0 | 1 | null {
   if (row.clinical_decision == null || row.auto_decision_recommendation == null) return null;
 
+  if (row.auditor_finding === "Agree") return 1;
+
   const matches = normalize(row.clinical_decision) === normalize(row.auto_decision_recommendation);
-  const base: 0 | 1 = matches ? 1 : 0;
 
   if (row.auditor_finding === "Disagree") {
-    return base === 1 ? 0 : 1;
+    return matches ? 0 : 1;
   }
-  return base;
+  return matches ? 1 : 0;
 }
 
 export function hasHumanFinding(row: Pick<RawDataRecord, "auditor_finding">): boolean {

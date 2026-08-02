@@ -54,7 +54,7 @@ export default function CategoryPage() {
           them as a starting point, not ground truth.
         </div>
       )}
-      <div className="glass-card p-4">
+      <div className="chart-card p-4">
         <h2 className="mb-3 text-sm font-semibold">Failure Pareto — Reason</h2>
         <EChart
           option={{

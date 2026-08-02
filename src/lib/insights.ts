@@ -48,14 +48,6 @@ export function buildInsights(cases: EnrichedCase[]): Insight[] {
     });
   }
 
-  const bySite = groupAccuracy(cases, (c) => c.site);
-  if (bySite.length > 1) {
-    const best = [...bySite].sort((a, b) => b.accuracy - a.accuracy)[0];
-    const worst = [...bySite].sort((a, b) => a.accuracy - b.accuracy)[0];
-    insights.push({ label: "Best performing site", detail: `${best.key} — ${best.accuracy.toFixed(1)}%` });
-    insights.push({ label: "Worst performing site", detail: `${worst.key} — ${worst.accuracy.toFixed(1)}%` });
-  }
-
   const bySupervisor = groupAccuracy(cases, (c) => c.supervisor).filter((s) => s.total >= 3);
   if (bySupervisor.length > 1) {
     const best = [...bySupervisor].sort((a, b) => b.accuracy - a.accuracy)[0];

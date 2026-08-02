@@ -34,6 +34,18 @@ export default function ExecutivePage() {
     return byWeek.sort((a, b) => a.key.localeCompare(b.key)).slice(-12);
   }, [cases]);
 
+  const siteStats = useMemo(
+    () => groupAccuracy(cases, (c) => c.site).sort((a, b) => b.accuracy - a.accuracy),
+    [cases],
+  );
+
+  const monthlyTrend = useMemo(() => {
+    const byMonth = groupAccuracy(cases, (c) => (c.case_date ? c.case_date.slice(0, 7) : "")).filter(
+      (m) => m.key,
+    );
+    return byMonth.sort((a, b) => a.key.localeCompare(b.key)).slice(-6);
+  }, [cases]);
+
   const latestUploadDate = Object.values(lastUpload)
     .map((u) => u?.uploaded_at)
     .filter((v): v is string => !!v)
@@ -69,7 +81,7 @@ export default function ExecutivePage() {
       </div>
 
       <DataGate hasRows={cases.length > 0}>
-        <div className="glass-card p-4">
+        <div className="chart-card p-4">
           <h2 className="mb-3 text-sm font-semibold">Accuracy Trend (last 12 weeks)</h2>
           <EChart
             option={{
@@ -101,6 +113,83 @@ export default function ExecutivePage() {
             }}
             height={260}
           />
+        </div>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          <div className="chart-card p-4">
+            <h2 className="mb-3 text-sm font-semibold">Accuracy by Site</h2>
+            <EChart
+              option={{
+                backgroundColor: "transparent",
+                grid: { left: 90, right: 30, top: 10, bottom: 20 },
+                tooltip: {},
+                xAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
+                yAxis: {
+                  type: "category",
+                  data: [...siteStats].reverse().map((s) => s.key),
+                  axisLabel: { color: "#94a3b8", fontSize: 10 },
+                },
+                series: [
+                  {
+                    type: "bar",
+                    data: [...siteStats].reverse().map((s) => Number(s.accuracy.toFixed(1))),
+                    color: "#4f8dff",
+                  },
+                ],
+              }}
+              height={220}
+            />
+          </div>
+
+          <div className="chart-card p-4">
+            <h2 className="mb-3 text-sm font-semibold">Pass / Fail Split</h2>
+            <EChart
+              option={{
+                backgroundColor: "transparent",
+                tooltip: { trigger: "item" },
+                legend: { bottom: 0, textStyle: { color: "#94a3b8", fontSize: 10 } },
+                series: [
+                  {
+                    type: "pie",
+                    radius: ["45%", "72%"],
+                    data: [
+                      { name: "Passing", value: stats.passing, itemStyle: { color: "#4ade80" } },
+                      { name: "Failing", value: stats.failing, itemStyle: { color: "#f87171" } },
+                    ],
+                    label: { color: "#e8edf7" },
+                  },
+                ],
+              }}
+              height={220}
+            />
+          </div>
+
+          <div className="chart-card p-4">
+            <h2 className="mb-3 text-sm font-semibold">Monthly Trend</h2>
+            <EChart
+              option={{
+                backgroundColor: "transparent",
+                grid: { left: 36, right: 16, top: 16, bottom: 30 },
+                tooltip: { trigger: "axis" },
+                xAxis: {
+                  type: "category",
+                  data: monthlyTrend.map((m) => m.key),
+                  axisLabel: { color: "#94a3b8", fontSize: 9, rotate: 30 },
+                },
+                yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
+                series: [
+                  {
+                    type: "line",
+                    data: monthlyTrend.map((m) => Number(m.accuracy.toFixed(1))),
+                    smooth: true,
+                    areaStyle: { opacity: 0.15 },
+                    color: "#2dd4c8",
+                  },
+                ],
+              }}
+              height={220}
+            />
+          </div>
         </div>
 
         {insights.length > 0 && (

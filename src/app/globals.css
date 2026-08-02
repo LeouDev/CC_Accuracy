@@ -55,6 +55,13 @@ body {
   border-radius: 1rem;
 }
 
+.chart-card {
+  background-color: #101d36;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.25rem;
+  color: #e8edf7;
+}
+
 @media print {
   .no-print {
     display: none !important;

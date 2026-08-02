@@ -3,22 +3,17 @@
 import { useMemo } from "react";
 import { useDataStore } from "@/store/dataStore";
 import { useFilterStore } from "@/store/filterStore";
-import { buildEnrichedCases, buildEnrichedCoaching } from "@/lib/enrich";
 import type { EnrichedCase, EnrichedCoaching } from "@/types/domain";
 
+// Enrichment (roster join, name canonicalization, week/quarter derivation) is
+// precomputed once in the store when data changes - these just select the
+// cached result so navigating between tabs doesn't redo it on every mount.
 export function useEnrichedCases(): EnrichedCase[] {
-  const rawRows = useDataStore((s) => s.rawRows);
-  const rosterRows = useDataStore((s) => s.rosterRows);
-  return useMemo(() => buildEnrichedCases(rawRows, rosterRows), [rawRows, rosterRows]);
+  return useDataStore((s) => s.enrichedCases);
 }
 
 export function useEnrichedCoachingRows(): EnrichedCoaching[] {
-  const coachingRows = useDataStore((s) => s.coachingRows);
-  const rosterRows = useDataStore((s) => s.rosterRows);
-  return useMemo(
-    () => buildEnrichedCoaching(coachingRows, rosterRows),
-    [coachingRows, rosterRows],
-  );
+  return useDataStore((s) => s.enrichedCoaching);
 }
 
 function matchesArrayFilter(value: string, selected: string[]): boolean {
@@ -41,6 +36,11 @@ export function useFilteredCases(): EnrichedCase[] {
       if (
         filters.subcategory.length > 0 &&
         !(c.subcategory && filters.subcategory.includes(c.subcategory))
+      )
+        return false;
+      if (
+        filters.segmentCategory.length > 0 &&
+        !filters.segmentCategory.includes(c.segment_category)
       )
         return false;
       if (filters.month.length > 0 && !(c.month && filters.month.includes(c.month))) return false;
@@ -78,6 +78,7 @@ export interface FilterOptions {
   auditor: string[];
   category: string[];
   subcategory: string[];
+  segmentCategory: string[];
   month: string[];
   quarter: string[];
   year: string[];
@@ -101,6 +102,7 @@ export function useFilterOptions(): FilterOptions {
       auditor: uniq((c) => c.auditor),
       category: uniq((c) => c.category),
       subcategory: uniq((c) => c.subcategory),
+      segmentCategory: uniq((c) => c.segment_category),
       month: uniq((c) => c.month),
       quarter: uniq((c) => c.quarter),
       year: uniq((c) => (c.year ? String(c.year) : null)),

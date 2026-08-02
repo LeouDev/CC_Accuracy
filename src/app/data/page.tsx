@@ -33,6 +33,8 @@ export default function DataPage() {
           { key: "score", header: "Score", accessor: (r) => r.score },
           { key: "category", header: "Category", accessor: (r) => r.category },
           { key: "subcategory", header: "Subcategory", accessor: (r) => r.subcategory },
+          { key: "business_segment", header: "Business Segment", accessor: (r) => r.business_segment },
+          { key: "segment_category", header: "Segment", accessor: (r) => r.segment_category },
           { key: "case_date", header: "Date", accessor: (r) => r.case_date },
         ]}
       />

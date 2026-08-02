@@ -18,7 +18,7 @@ export default function SitesPage() {
     <div className="space-y-6">
       <DataGate hasRows={stats.length > 0}>
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Accuracy by Site</h2>
             <EChart
               option={{
@@ -42,7 +42,7 @@ export default function SitesPage() {
               height={260}
             />
           </div>
-          <div className="glass-card p-4">
+          <div className="chart-card p-4">
             <h2 className="mb-3 text-sm font-semibold">Case Volume Distribution</h2>
             <EChart
               option={{
