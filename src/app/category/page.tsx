@@ -59,9 +59,9 @@ export default function CategoryPage() {
         <EChart
           option={{
             backgroundColor: "transparent",
-            grid: { left: 40, right: 40, top: 30, bottom: 90 },
+            grid: { left: 40, right: 40, top: 50, bottom: 90 },
             tooltip: { trigger: "axis" },
-            legend: { data: ["Failures", "Cumulative %"], textStyle: { color: "#94a3b8" } },
+            legend: { data: ["Failures", "Cumulative %"], top: 0, textStyle: { color: "#94a3b8" } },
             xAxis: {
               type: "category",
               data: failuresByCategory.map((c) => c.key),
@@ -93,7 +93,11 @@ export default function CategoryPage() {
                   silent: true,
                   symbol: "none",
                   lineStyle: { color: "#94a3b8", type: "dashed" },
-                  label: { formatter: "80%", color: "#94a3b8" },
+                  label: {
+                    formatter: "80% threshold",
+                    color: "#94a3b8",
+                    position: "insideStartTop",
+                  },
                   data: [{ yAxis: 80 }],
                 },
               },
