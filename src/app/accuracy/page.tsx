@@ -90,9 +90,16 @@ export default function AccuracyPage() {
           <EChart
             option={{
               backgroundColor: "transparent",
-              grid: { left: 40, right: 20, top: 30, bottom: 60 },
+              grid: { left: 40, right: 20, top: 56, bottom: 60 },
               tooltip: { trigger: "axis" },
-              legend: { data: ["Accuracy %", "Rolling avg"], textStyle: { color: "#94a3b8" }, top: 0 },
+              legend: {
+                data: ["Passing", "Below Target", "Rolling avg"],
+                textStyle: { color: "#94a3b8", fontSize: 10 },
+                top: 0,
+                left: "center",
+                width: "92%",
+                itemGap: 12,
+              },
               xAxis: {
                 type: "category",
                 data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
@@ -101,10 +108,30 @@ export default function AccuracyPage() {
               yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
               series: [
                 {
+                  // Legend-only proxies so "Passing"/"Below Target" show as swatches -
+                  // the real bars below are colored per-point, not per-series.
+                  name: "Passing",
+                  type: "bar",
+                  data: [],
+                  itemStyle: { color: "#4ade80" },
+                  tooltip: { show: false },
+                },
+                {
+                  name: "Below Target",
+                  type: "bar",
+                  data: [],
+                  itemStyle: { color: "#fb923c" },
+                  tooltip: { show: false },
+                },
+                {
                   name: "Accuracy %",
                   type: "bar",
-                  data: trend.map((t) => Number(t.accuracy.toFixed(1))),
-                  color: "#4f8dff",
+                  data: trend.map((t) => ({
+                    value: Number(t.accuracy.toFixed(1)),
+                    itemStyle: {
+                      color: t.accuracy >= ACCURACY_TARGET_PCT ? "#4ade80" : "#fb923c",
+                    },
+                  })),
                   markLine: {
                     silent: true,
                     symbol: "none",
