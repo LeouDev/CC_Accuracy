@@ -90,7 +90,7 @@ export default function AuditorsPage() {
             <EChart
               option={{
                 backgroundColor: "transparent",
-                grid: { left: 100, right: 30, top: 10, bottom: 20 },
+                grid: { left: 100, right: 30, top: 36, bottom: 20 },
                 tooltip: { trigger: "axis" },
                 legend: { top: 0, textStyle: { color: "#94a3b8", fontSize: 10 } },
                 xAxis: { type: "value", axisLabel: { color: "#94a3b8" } },
@@ -116,7 +116,7 @@ export default function AuditorsPage() {
                   },
                 ],
               }}
-              height={Math.max(240, stats.length * 28)}
+              height={Math.max(240, stats.length * 28) + 26}
             />
           </div>
 
