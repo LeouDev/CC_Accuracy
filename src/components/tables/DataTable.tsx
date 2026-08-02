@@ -9,6 +9,8 @@ export interface ColumnDef<T> {
   accessor: (row: T) => string | number | null;
 }
 
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const;
+
 export function DataTable<T>({
   rows,
   columns,
@@ -24,6 +26,7 @@ export function DataTable<T>({
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(pageSize);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return rows;
@@ -55,8 +58,9 @@ export function DataTable<T>({
     return copy;
   }, [filtered, sortKey, sortDir, columns]);
 
-  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
-  const pageRows = sorted.slice(page * pageSize, page * pageSize + pageSize);
+  const effectiveRowsPerPage = rowsPerPage === Infinity ? Math.max(sorted.length, 1) : rowsPerPage;
+  const totalPages = Math.max(1, Math.ceil(sorted.length / effectiveRowsPerPage));
+  const pageRows = sorted.slice(page * effectiveRowsPerPage, page * effectiveRowsPerPage + effectiveRowsPerPage);
 
   function toggleSort(key: string) {
     if (sortKey === key) {
@@ -98,6 +102,24 @@ export function DataTable<T>({
         />
         <div className="flex items-center gap-2 text-xs">
           <span className="text-muted">{sorted.length} rows</span>
+          <label className="flex items-center gap-1 text-muted">
+            Show
+            <select
+              value={rowsPerPage === Infinity ? "all" : rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(e.target.value === "all" ? Infinity : Number(e.target.value));
+                setPage(0);
+              }}
+              className="rounded-lg border border-card-border bg-transparent px-1.5 py-1 text-xs outline-none focus:border-accent"
+            >
+              {PAGE_SIZE_OPTIONS.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+              <option value="all">All</option>
+            </select>
+          </label>
           <button
             onClick={() => exportData("csv")}
             className="rounded-lg border border-card-border px-2 py-1 hover:border-accent"
