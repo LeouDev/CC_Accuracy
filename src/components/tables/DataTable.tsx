@@ -141,7 +141,7 @@ export function DataTable<T>({
         </div>
       </div>
       <div className="max-h-[32rem] overflow-auto">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-center text-xs">
           <thead className="sticky top-0 bg-[var(--background)]">
             <tr>
               {columns.map((c) => (

@@ -103,7 +103,12 @@ export default function AccuracyPage() {
               xAxis: {
                 type: "category",
                 data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
-                axisLabel: { color: "#94a3b8", fontSize: 10, rotate: 45 },
+                axisLabel: {
+                  color: "#94a3b8",
+                  fontSize: 10,
+                  rotate: trend.length > 8 ? 45 : 0,
+                  align: trend.length > 8 ? "right" : "center",
+                },
               },
               yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
               series: [

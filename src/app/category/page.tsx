@@ -65,7 +65,14 @@ export default function CategoryPage() {
             xAxis: {
               type: "category",
               data: failuresByCategory.map((c) => c.key),
-              axisLabel: { color: "#94a3b8", rotate: 45, fontSize: 9, width: 100, overflow: "truncate" },
+              axisLabel: {
+                color: "#94a3b8",
+                rotate: 45,
+                align: "right",
+                fontSize: 9,
+                width: 100,
+                overflow: "truncate",
+              },
             },
             yAxis: [
               { type: "value", name: "Failures", axisLabel: { color: "#94a3b8" } },
