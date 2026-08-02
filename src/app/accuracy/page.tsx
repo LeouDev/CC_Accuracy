@@ -105,16 +105,27 @@ export default function AccuracyPage() {
                 width: "92%",
                 itemGap: 12,
               },
-              xAxis: {
-                type: "category",
-                data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
-                axisLabel: {
-                  color: "#94a3b8",
-                  fontSize: 10,
-                  rotate: trend.length > 8 ? 45 : 0,
-                  align: trend.length > 8 ? "right" : "center",
+              xAxis: [
+                {
+                  type: "category",
+                  data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
+                  axisLabel: {
+                    color: "#94a3b8",
+                    fontSize: 10,
+                    rotate: trend.length > 8 ? 45 : 0,
+                    align: trend.length > 8 ? "right" : "center",
+                  },
                 },
-              },
+                {
+                  // Hidden axis for the legend-only proxy series below, so their (empty)
+                  // bars don't share/split the real bar's category slot on the main axis -
+                  // ECharts divides bar width by how many bar series share an axis, which
+                  // was pushing the real bar off-center from its own axis label.
+                  type: "category",
+                  data: trend.map((t) => (granularity === "week" ? formatWeekLabel(t.key) : t.key)),
+                  show: false,
+                },
+              ],
               yAxis: { type: "value", max: 100, axisLabel: { color: "#94a3b8", formatter: "{value}%" } },
               series: [
                 {
@@ -122,6 +133,7 @@ export default function AccuracyPage() {
                   // the real bars below are colored per-point, not per-series.
                   name: "Passing",
                   type: "bar",
+                  xAxisIndex: 1,
                   data: [],
                   itemStyle: { color: "#4ade80" },
                   tooltip: { show: false },
@@ -129,6 +141,7 @@ export default function AccuracyPage() {
                 {
                   name: "Below Target",
                   type: "bar",
+                  xAxisIndex: 1,
                   data: [],
                   itemStyle: { color: "#fb923c" },
                   tooltip: { show: false },
